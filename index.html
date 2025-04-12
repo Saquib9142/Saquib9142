@@ -1,91 +1,156 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Runner Game - Emoji Style</title>
+  <title>Emoji Runner - Fun Mode</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #222; font-family: Arial; text-align: center; color: white; }
+    body {
+      background-color: #222;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+    }
+
+    h1 { margin-top: 20px; }
 
     #gameArea {
-      position: relative;
       width: 100%;
       height: 300px;
-      background: #444;
+      background: linear-gradient(to bottom, #66ccff, #99ff99);
       overflow: hidden;
+      position: relative;
       border-bottom: 5px solid green;
     }
 
     #player {
-      font-size: 40px;
+      font-size: 50px;
       position: absolute;
       bottom: 0;
-      left: 50px;
+      left: 60px;
+      transition: bottom 0.2s;
+      animation: bounce 0.6s infinite alternate;
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0px); }
+      to { transform: translateY(-5px); }
     }
 
     #obstacle {
       width: 40px;
       height: 50px;
-      background: red;
+      background-color: red;
       position: absolute;
       bottom: 0;
       right: -40px;
-      animation: moveObs 2s linear infinite;
+      animation: moveObstacle 2s linear infinite;
     }
 
-    @keyframes moveObs {
+    @keyframes moveObstacle {
       from { right: -40px; }
       to { right: 100%; }
     }
 
     .jump {
-      animation: jump 0.5s;
+      animation: jumpAnim 0.5s;
     }
 
-    @keyframes jump {
+    @keyframes jumpAnim {
       0% { bottom: 0; }
       50% { bottom: 100px; }
       100% { bottom: 0; }
     }
 
+    #score {
+      font-size: 24px;
+      margin-top: 10px;
+    }
+
     #gameOver {
       font-size: 30px;
-      display: none;
-      margin-top: 20px;
       color: red;
+      display: none;
+      margin-top: 15px;
+    }
+
+    #controls {
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background: #45a049;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-<h1>Dora Emoji Runner!</h1>
+<h1>Emoji Runner - Fun Mode</h1>
+<div id="score">Score: 0</div>
 <div id="gameArea">
-  <div id="player">🤖</div>
+  <div id="player">🐱</div>
   <div id="obstacle"></div>
 </div>
-<div id="gameOver">Game Over! Refresh to Try Again</div>
+<div id="gameOver">Game Over!</div>
+
+<div id="controls">
+  <button onclick="jump()">Jump</button>
+  <button onclick="restartGame()">Restart</button>
+</div>
 
 <script>
   const player = document.getElementById("player");
   const obstacle = document.getElementById("obstacle");
+  const scoreDisplay = document.getElementById("score");
   const gameOver = document.getElementById("gameOver");
 
-  document.addEventListener("keydown", function(e) {
-    if (e.code === "Space" && !player.classList.contains("jump")) {
+  let score = 0;
+  let gameRunning = true;
+
+  function jump() {
+    if (!player.classList.contains("jump")) {
       player.classList.add("jump");
       setTimeout(() => player.classList.remove("jump"), 500);
     }
+  }
+
+  document.addEventListener("keydown", function (e) {
+    if (e.code === "Space") jump();
   });
 
-  setInterval(function() {
-    let playerBottom = parseInt(window.getComputedStyle(player).getPropertyValue("bottom"));
-    let obstacleLeft = parseInt(window.getComputedStyle(obstacle).getPropertyValue("left"));
+  let scoreInterval = setInterval(() => {
+    if (gameRunning) {
+      score++;
+      scoreDisplay.textContent = "Score: " + score;
+    }
+  }, 100);
 
-    if (obstacleLeft < 90 && obstacleLeft > 40 && playerBottom <= 50) {
+  let checkCollision = setInterval(() => {
+    const playerBottom = parseInt(window.getComputedStyle(player).getPropertyValue("bottom"));
+    const obstacleLeft = parseInt(window.getComputedStyle(obstacle).getPropertyValue("left"));
+
+    if (obstacleLeft < 90 && obstacleLeft > 40 && playerBottom < 50) {
+      gameRunning = false;
       gameOver.style.display = "block";
       obstacle.style.animation = "none";
       obstacle.style.left = obstacleLeft + "px";
+      clearInterval(scoreInterval);
     }
   }, 10);
+
+  function restartGame() {
+    location.reload();
+  }
 </script>
 
 </body>
