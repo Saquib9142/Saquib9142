@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Mini Runner Game</title>
+  <title>Runner Game - Emoji Style</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #222; color: white; font-family: Arial; text-align: center; }
+    body { background: #222; font-family: Arial; text-align: center; color: white; }
 
     #gameArea {
       position: relative;
@@ -16,26 +16,24 @@
     }
 
     #player {
-      width: 50px;
-      height: 50px;
-      background: yellow;
+      font-size: 40px;
       position: absolute;
       bottom: 0;
       left: 50px;
     }
 
     #obstacle {
-      width: 30px;
+      width: 40px;
       height: 50px;
       background: red;
       position: absolute;
       bottom: 0;
-      right: -30px;
+      right: -40px;
       animation: moveObs 2s linear infinite;
     }
 
     @keyframes moveObs {
-      from { right: -30px; }
+      from { right: -40px; }
       to { right: 100%; }
     }
 
@@ -59,12 +57,12 @@
 </head>
 <body>
 
-<h1>Mini Subway-Style Runner</h1>
+<h1>Dora Emoji Runner!</h1>
 <div id="gameArea">
-  <div id="player"></div>
+  <div id="player">🤖</div>
   <div id="obstacle"></div>
 </div>
-<div id="gameOver">Game Over!</div>
+<div id="gameOver">Game Over! Refresh to Try Again</div>
 
 <script>
   const player = document.getElementById("player");
@@ -82,7 +80,7 @@
     let playerBottom = parseInt(window.getComputedStyle(player).getPropertyValue("bottom"));
     let obstacleLeft = parseInt(window.getComputedStyle(obstacle).getPropertyValue("left"));
 
-    if (obstacleLeft < 80 && obstacleLeft > 20 && playerBottom <= 50) {
+    if (obstacleLeft < 90 && obstacleLeft > 40 && playerBottom <= 50) {
       gameOver.style.display = "block";
       obstacle.style.animation = "none";
       obstacle.style.left = obstacleLeft + "px";
