@@ -1,15 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subway Runner</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <h1>Subway Runner</h1>
-    <canvas id="gameCanvas" width="800" height="400"></canvas>
-    <p>Score: <span id="score">0</span></p>
-    <script src="game.js"></script>
-</body>
-</html>
+function update() {
+    if (gameOver) {
+        ctx.fillStyle = 'red';
+        ctx.font = '40px Arial';
+        ctx.fillText('Game Over! Score: ' + score, canvas.width / 2 - 150, canvas.height / 2);
+        return;
+    }
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Debug: Check if canvas is working
+    ctx.fillStyle = 'black';
+    ctx.fillText('Testing...', 10, 20);
+
+    // Player draw
+    ctx.fillStyle = 'blue';
+    ctx.fillRect(player.x, player.y, player.width, player.height);
+
+    // Player physics (same as before)
+    player.velocityY += player.gravity;
+    player.y += player.velocityY;
+
+    if (player.y > canvas.height - player.height) {
+        player.y = canvas.height - player.height;
+        player.velocityY = 0;
+        player.jumping = false;
+    }
+
+    // Rest of the code (coins, obstacles, etc.) remains same
+    // ...
+}
