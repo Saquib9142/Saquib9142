@@ -1,117 +1,28 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html>
 <head>
-  <title>Simple Jump Game</title>
+  <title>2048 Game</title>
+  <link href="https://fonts.googleapis.com/css?family=Clear+Sans:400,700" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: #eef;
-      font-family: sans-serif;
-      text-align: center;
+      font-family: 'Clear Sans', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: #faf8ef;
     }
-
-    #gameArea {
-      width: 100%;
-      height: 300px;
-      background: #cceeff;
-      position: relative;
-      overflow: hidden;
-      border-bottom: 5px solid green;
-    }
-
-    #player {
-      width: 40px;
-      height: 40px;
-      background: orange;
-      border-radius: 50%;
-      position: absolute;
-      bottom: 0;
-      left: 60px;
-    }
-
-    #obstacle {
-      width: 40px;
-      height: 40px;
-      background: red;
-      position: absolute;
-      bottom: 0;
-      right: -40px;
-      animation: move 2s linear infinite;
-    }
-
-    @keyframes move {
-      0% { right: -40px; }
-      100% { right: 100%; }
-    }
-
-    .jump {
-      animation: jumpAnim 0.5s ease;
-    }
-
-    @keyframes jumpAnim {
-      0% { bottom: 0; }
-      50% { bottom: 100px; }
-      100% { bottom: 0; }
-    }
-
-    #gameOver {
-      font-size: 24px;
-      color: red;
-      display: none;
-      margin-top: 20px;
-    }
-
-    #restartBtn {
-      display: none;
-      padding: 10px 20px;
-      font-size: 18px;
-      margin-top: 10px;
-      background: red;
-      color: white;
+    iframe {
       border: none;
-      border-radius: 5px;
+      width: 100%;
+      max-width: 500px;
+      height: 600px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
   </style>
 </head>
 <body>
-
-<h2>Simple Dino Style Game</h2>
-<div id="gameArea" onclick="jump()">
-  <div id="player"></div>
-  <div id="obstacle"></div>
-</div>
-<div id="gameOver">Game Over!</div>
-<button id="restartBtn" onclick="location.reload()">Restart</button>
-
-<script>
-  const player = document.getElementById("player");
-  const obstacle = document.getElementById("obstacle");
-  const gameOver = document.getElementById("gameOver");
-  const restartBtn = document.getElementById("restartBtn");
-
-  function jump() {
-    if (!player.classList.contains("jump")) {
-      player.classList.add("jump");
-      setTimeout(() => {
-        player.classList.remove("jump");
-      }, 500);
-    }
-  }
-
-  let gameInterval = setInterval(() => {
-    let playerBottom = parseInt(window.getComputedStyle(player).getPropertyValue("bottom"));
-    let obstacleLeft = parseInt(window.getComputedStyle(obstacle).getPropertyValue("left"));
-
-    if (obstacleLeft < 100 && obstacleLeft > 40 && playerBottom < 40) {
-      // Collision detected
-      obstacle.style.animation = "none";
-      obstacle.style.left = obstacleLeft + "px";
-      gameOver.style.display = "block";
-      restartBtn.style.display = "inline-block";
-      clearInterval(gameInterval);
-    }
-  }, 10);
-</script>
-
+  <!-- 2048 Game Embedded -->
+  <iframe src="https://play2048.co/" title="2048 Game"></iframe>
 </body>
 </html>
