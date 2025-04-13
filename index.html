@@ -1,15 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>2048 Game</title>
-  <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
-  <h1>2048</h1>
-  <div class="game-container" id="game"></div>
-  <p>Use arrow keys to move tiles.</p>
-  <script src="script.js"></script>
-</body>
-</html>
+const gameContainer = document.getElementById("game");
+let grid = [];
+
+function createGrid() {
+  grid = [];
+  gameContainer.innerHTML = '';
+  for (let i = 0; i < 4; i++) {
+    grid[i] = [];
+    for (let j = 0; j < 4; j++) {
+      let div = document.createElement("div");
+      div.classList.add("tile");
+      div.textContent = "";
+      gameContainer.appendChild(div);
+      grid[i][j] = div;
+    }
+  }
+}
+
+function addRandomTile() {
+  let empty = [];
+  for (let i = 0; i < 4; i++)
+    for (let j = 0; j < 4; j++)
+      if (!grid[i][j].textContent) empty.push([i, j]);
+
+  if (empty.length == 0) return;
+  let [i, j] = empty[Math.floor(Math.random() * empty.length)];
+  grid[i][j].textContent = Math.random() > 0.9 ? 4 : 2;
+}
+
+function move(direction) {
+  let moved = false;
+  for (let i = 0; i < 4; i++) {
+    let line = [];
+    for (let j = 0; j < 4; j++) {
+      let val = direction === "left" || direction === "right"
+        ? grid[i][j].textContent
+        : grid[j][i].textContent;
+      line.push(val ? Number(val) : 0);
+    }
+
+    if (direction === "right" || direction === "down") line.reverse();
+
+    let newLine = line.filter(n => n);
+    for (let j = 0; j < newLine.length - 1; j++) {
+      if (newLine[j] === newLine[j + 1]) {
+        newLine[j] *= 2;
+        newLine[j + 1] = 0;
+        moved = true;
+      }
+    }
+    newLine = newLine.filter(n => n);
+    while (newLine.length < 4) newLine.push(0);
+    if (direction === "right" || direction === "down") newLine.reverse();
+
+    for (let j = 0; j < 4; j++) {
+      let currentVal = direction === "left" || direction === "right"
+        ? grid[i][j].textContent
+        : grid[j][i].textContent;
+      if (
+        (direction === "left" || direction === "right") &&
+        currentVal !== (newLine[j] ? String(newLine[j]) : "")
+      ) {
+        moved = true;
+        grid[i][j].textContent = newLine[j] ? String(newLine[j]) : "";
+      } else if (
+        (direction === "up" || direction === "down") &&
+        currentVal !== (newLine[j] ? String(newLine[j]) : "")
+      ) {
+        moved = true;
+        grid[j][i].textContent = newLine[j] ? String(newLine[j]) : "";
+      }
+    }
+  }
+  if (moved) addRandomTile();
+}
+
+document.addEventListener("keydown", e => {
+  if (e.key === "ArrowLeft") move("left");
+  if (e.key === "ArrowRight") move("right");
+  if (e.key === "ArrowUp") move("up");
+  if (e.key === "ArrowDown") move("down");
+});
+
+createGrid();
+addRandomTile();
+addRandomTile();
