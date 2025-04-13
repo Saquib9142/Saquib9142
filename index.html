@@ -1,86 +1,80 @@
-const gameContainer = document.getElementById("game");
-let grid = [];
-
-function createGrid() {
-  grid = [];
-  gameContainer.innerHTML = '';
-  for (let i = 0; i < 4; i++) {
-    grid[i] = [];
-    for (let j = 0; j < 4; j++) {
-      let div = document.createElement("div");
-      div.classList.add("tile");
-      div.textContent = "";
-      gameContainer.appendChild(div);
-      grid[i][j] = div;
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Snake Game</title>
+  <style>
+    canvas {
+      background: #000;
+      display: block;
+      margin: auto;
     }
-  }
-}
+  </style>
+</head>
+<body>
+  <canvas id="game" width="400" height="400"></canvas>
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
 
-function addRandomTile() {
-  let empty = [];
-  for (let i = 0; i < 4; i++)
-    for (let j = 0; j < 4; j++)
-      if (!grid[i][j].textContent) empty.push([i, j]);
+    const box = 20;
+    let snake = [{ x: 9 * box, y: 9 * box }];
+    let food = {
+      x: Math.floor(Math.random() * 20) * box,
+      y: Math.floor(Math.random() * 20) * box,
+    };
+    let dir;
+    let score = 0;
 
-  if (empty.length == 0) return;
-  let [i, j] = empty[Math.floor(Math.random() * empty.length)];
-  grid[i][j].textContent = Math.random() > 0.9 ? 4 : 2;
-}
-
-function move(direction) {
-  let moved = false;
-  for (let i = 0; i < 4; i++) {
-    let line = [];
-    for (let j = 0; j < 4; j++) {
-      let val = direction === "left" || direction === "right"
-        ? grid[i][j].textContent
-        : grid[j][i].textContent;
-      line.push(val ? Number(val) : 0);
+    document.addEventListener("keydown", direction);
+    function direction(e) {
+      if (e.key === "ArrowLeft" && dir !== "RIGHT") dir = "LEFT";
+      else if (e.key === "ArrowUp" && dir !== "DOWN") dir = "UP";
+      else if (e.key === "ArrowRight" && dir !== "LEFT") dir = "RIGHT";
+      else if (e.key === "ArrowDown" && dir !== "UP") dir = "DOWN";
     }
 
-    if (direction === "right" || direction === "down") line.reverse();
+    function draw() {
+      ctx.clearRect(0, 0, 400, 400);
 
-    let newLine = line.filter(n => n);
-    for (let j = 0; j < newLine.length - 1; j++) {
-      if (newLine[j] === newLine[j + 1]) {
-        newLine[j] *= 2;
-        newLine[j + 1] = 0;
-        moved = true;
+      for (let i = 0; i < snake.length; i++) {
+        ctx.fillStyle = i === 0 ? "lime" : "white";
+        ctx.fillRect(snake[i].x, snake[i].y, box, box);
       }
-    }
-    newLine = newLine.filter(n => n);
-    while (newLine.length < 4) newLine.push(0);
-    if (direction === "right" || direction === "down") newLine.reverse();
 
-    for (let j = 0; j < 4; j++) {
-      let currentVal = direction === "left" || direction === "right"
-        ? grid[i][j].textContent
-        : grid[j][i].textContent;
+      ctx.fillStyle = "red";
+      ctx.fillRect(food.x, food.y, box, box);
+
+      let head = { x: snake[0].x, y: snake[0].y };
+
+      if (dir === "LEFT") head.x -= box;
+      if (dir === "RIGHT") head.x += box;
+      if (dir === "UP") head.y -= box;
+      if (dir === "DOWN") head.y += box;
+
       if (
-        (direction === "left" || direction === "right") &&
-        currentVal !== (newLine[j] ? String(newLine[j]) : "")
+        head.x < 0 || head.x >= 400 ||
+        head.y < 0 || head.y >= 400 ||
+        snake.some(s => s.x === head.x && s.y === head.y)
       ) {
-        moved = true;
-        grid[i][j].textContent = newLine[j] ? String(newLine[j]) : "";
-      } else if (
-        (direction === "up" || direction === "down") &&
-        currentVal !== (newLine[j] ? String(newLine[j]) : "")
-      ) {
-        moved = true;
-        grid[j][i].textContent = newLine[j] ? String(newLine[j]) : "";
+        clearInterval(game);
+        alert("Game Over! Score: " + score);
+        return;
+      }
+
+      snake.unshift(head);
+
+      if (head.x === food.x && head.y === food.y) {
+        score++;
+        food = {
+          x: Math.floor(Math.random() * 20) * box,
+          y: Math.floor(Math.random() * 20) * box,
+        };
+      } else {
+        snake.pop();
       }
     }
-  }
-  if (moved) addRandomTile();
-}
 
-document.addEventListener("keydown", e => {
-  if (e.key === "ArrowLeft") move("left");
-  if (e.key === "ArrowRight") move("right");
-  if (e.key === "ArrowUp") move("up");
-  if (e.key === "ArrowDown") move("down");
-});
-
-createGrid();
-addRandomTile();
-addRandomTile();
+    let game = setInterval(draw, 100);
+  </script>
+</body>
+</html>
