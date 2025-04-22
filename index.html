@@ -1,101 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Saquib's Page</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0f2f5;
-      text-align: center;
-      padding-top: 100px;
-    }
-    button {
-      padding: 15px 30px;
-      font-size: 18px;
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    #modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 999;
-    }
-    #modalContent {
-      background: white;
-      width: 80%;
-      max-width: 400px;
-      margin: 100px auto;
-      padding: 20px;
-      border-radius: 15px;
-      text-align: left;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
-      position: relative;
-      max-height: 50vh;        /* NEW: Limit height */
-      overflow-y: auto;        /* NEW: Scroll when needed */
-    }
-    .close {
-      position: absolute;
-      right: 15px;
-      top: 10px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 18px;
-    }
-    #typewriter {
-      white-space: pre-wrap;
-      font-size: 16px;
-      color: #333;
-      line-height: 1.5;
-    }
-  </style>
-</head>
-<body>
+<html>
+  <head>
+    <title>Saquib's Website</title>
+  </head>
+  <body>
+    <h1>Welcome to My Website!</h1>
 
-  <h1>Welcome to Saquib's World!</h1>
-  <button onclick="openBot()">Talk to AI Assistant</button>
-
-  <div id="modal">
-    <div id="modalContent">
-      <span class="close" onclick="closeBot()">&times;</span>
-      <p id="typewriter"></p>
-    </div>
-  </div>
-
-  <script>
-    const text = `Hi! Main hoon Saquib ka virtual assistant.\n
-Woh Kishanganj ka regne wala hai par abhi Malad West me reh raha ha, — 18 saal ka hai aur ek saal pehle 12th complete kiya hai + ADCA computer course bhi.\n
-Anime, movies aur web series ka bada shauq hai usse — lekin future ki bhi full planning chal rahi hai.\n
-Yeh website usne khud banayi hai HTML, CSS aur JavaScript se — aur haan, ChatGPT aur GitHub ki madad se.\n
-Abhi wo computer-related job dhund raha hai, part-time ya full-time — kaam ka pakka banda hai!\n
-Agar kuch offer dena ho to contact zaroor karna! is number par 9234785677`;
-
-    let i = 0;
-    function typeWriter() {
-      if (i < text.length) {
-        document.getElementById("typewriter").innerHTML += text.charAt(i);
-        i++;
-        setTimeout(typeWriter, 35); // typing speed
+    <!-- Chatbase Chatbot Embed Code -->
+    <script>
+      window.chatbaseConfig = {
+        chatbotId: "UuoxhyzNQrazAF3i2KVuj",
       }
-    }
-
-    function openBot() {
-      document.getElementById("modal").style.display = "block";
-      document.getElementById("typewriter").innerHTML = "";
-      i = 0;
-      typeWriter();
-    }
-
-    function closeBot() {
-      document.getElementById("modal").style.display = "none";
-    }
-  </script>
-
-</body>
+    </script>
+    <script
+      src="https://www.chatbase.co/embed.min.js"
+      id="chatbase-script"
+      defer>
+    </script>
+  </body>
 </html>
